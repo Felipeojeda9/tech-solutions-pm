@@ -19,6 +19,84 @@
             </style>
         @endif
     </head>
+
+
+// WIDGET UF
+    
+    <style>
+  #uf-widget {
+    font-family: sans-serif;
+    color: #000 !important;
+    background-color: #fff !important;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    position: relative;            /* crea nuevo contexto de apilamiento */
+  }
+
+  /* Fuerza pointer-events en todos los hijos */
+  #uf-widget,
+  #uf-widget * {
+    pointer-events: auto !important;
+  }
+
+  #uf-widget input {
+    color: #000 !important;
+    background-color: #fff !important;
+    border: 1px solid #ccc;
+    padding: 0.25em 0.5em;
+    cursor: text !important;
+    user-select: text !important;
+    width: 200px;
+    position: relative;            /* eleva el campo sobre posibles overlays */
+    z-index: 10 !important;        /* asegúrate de estar por encima */
+  }
+
+  #uf-widget input::placeholder {
+    color: #000 !important;
+  }
+
+  #uf-widget label {
+    display: inline-block;
+    margin-bottom: 0.25em;
+    color: #000 !important;
+  }
+
+  #uf-widget p {
+    margin: 0.5em 0;
+  }
+
+  #uf-loading,
+  #uf-error,
+  #uf-info {
+    color: #000 !important;
+  }
+</style>
+
+<div id="uf-widget">
+  <p id="uf-loading">Cargando valor UF…</p>
+  <p id="uf-error" style="display:none;"></p>
+
+  <div id="uf-content" style="display:none; margin-top: 1rem;">
+    <p id="uf-info" style="font-weight:bold;"></p>
+
+    <div>
+      <label for="input-pesos">Pesos CLP:</label>
+      <input type="text" id="input-pesos" placeholder="0">
+    </div>
+
+    <div style="margin-top: 0.5rem;">
+      <label for="input-uf">Unidades UF:</label>
+      <input type="number" id="input-uf" placeholder="0.0000" step="0.0001" min="0">
+    </div>
+  </div>
+</div>
+
+<script src="{{ asset('valor-uf.js') }}"></script>
+
+
+
+
+    
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
         <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
             <img id="background" class="absolute -left-20 top-0 max-w-[877px]" src="https://laravel.com/assets/img/welcome/background.svg" alt="Laravel background" />

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class Project
+class Proyecto
 {
 
     // Simulación de una base de datos para proyectos.

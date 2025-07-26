@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Proyecto;
 
 class ProyectoDestroyController extends Controller
 {
-    public function __invoke(Proyecto $proyecto)
+    public function __invoke($id)
     {
-        $proyecto->delete();
-        return response()->noContent();
+        $deleted = Proyecto::delete($id);
+        if ($deleted) {
+            return response()->noContent();
+        }
+        return response()->json(['error' => 'Proyecto no encontrado'], 404);
     }
 }
 

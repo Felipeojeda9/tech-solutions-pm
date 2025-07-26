@@ -5,16 +5,16 @@
 @section('content')
 <div class="bg-white p-6 rounded shadow">
     <h2 class="text-xl font-bold mb-4 text-red-600">Eliminar Proyecto</h2>
-    
+
     <div id="proyecto-container">
         <p class="text-gray-500">Cargando proyecto...</p>
     </div>
-    
+
     <div id="confirmacion" style="display: none;" class="mt-6 p-4 bg-red-50 border border-red-200 rounded">
         <p class="text-red-800 font-medium mb-4">
             ⚠️ ¿Estás seguro de que quieres eliminar este proyecto? Esta acción no se puede deshacer.
         </p>
-        
+
         <div class="flex space-x-3">
             <button id="confirmar-eliminar" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
                 Sí, Eliminar Proyecto
@@ -24,7 +24,7 @@
             </a>
         </div>
     </div>
-    
+
     <div id="mensaje" class="mt-4"></div>
 </div>
 
@@ -38,11 +38,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function cargarProyecto() {
     const proyectoId = {{ $id }};
-    
+
     axios.get(`/proyectos/${proyectoId}`)
         .then(response => {
             proyectoData = response.data;
-            
+
             const html = `
                 <div class="bg-gray-50 p-4 rounded border">
                     <h3 class="text-lg font-semibold mb-3">Datos del Proyecto a Eliminar:</h3>
@@ -51,17 +51,17 @@ function cargarProyecto() {
                             <label class="block text-sm font-medium text-gray-700 mb-1">ID</label>
                             <p class="text-lg">${proyectoData.id}</p>
                         </div>
-                        
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
                             <p class="text-lg font-semibold">${proyectoData.nombre}</p>
                         </div>
-                        
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de Inicio</label>
                             <p class="text-lg">${proyectoData.fecha_inicio}</p>
                         </div>
-                        
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
                             <p class="text-lg">
@@ -70,12 +70,12 @@ function cargarProyecto() {
                                 </span>
                             </p>
                         </div>
-                        
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Responsable</label>
                             <p class="text-lg">${proyectoData.responsable}</p>
                         </div>
-                        
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Monto</label>
                             <p class="text-lg font-bold text-green-600">$${proyectoData.monto.toLocaleString()}</p>
@@ -83,7 +83,7 @@ function cargarProyecto() {
                     </div>
                 </div>
             `;
-            
+
             document.getElementById('proyecto-container').innerHTML = html;
             document.getElementById('confirmacion').style.display = 'block';
         })
@@ -95,7 +95,7 @@ function cargarProyecto() {
 
 document.getElementById('confirmar-eliminar').addEventListener('click', function() {
     const proyectoId = {{ $id }};
-    
+
     axios.delete(`/proyectos/${proyectoId}`)
         .then(response => {
             document.getElementById('mensaje').innerHTML = '<p class="text-green-600">Proyecto eliminado exitosamente.</p>';

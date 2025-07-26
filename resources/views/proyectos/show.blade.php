@@ -5,11 +5,11 @@
 @section('content')
 <div class="bg-white p-6 rounded shadow">
     <h2 class="text-xl font-bold mb-4">Detalles del Proyecto</h2>
-    
+
     <div id="proyecto-container">
         <p class="text-gray-500">Cargando proyecto...</p>
     </div>
-    
+
     <div class="mt-6">
         <a href="{{ route('proyectos.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
             Volver a la Lista
@@ -28,28 +28,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function cargarProyecto() {
     const proyectoId = {{ $id }};
-    
+
     axios.get(`/proyectos/${proyectoId}`)
         .then(response => {
             const proyecto = response.data;
-            
+
             const html = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">ID</label>
                         <p class="text-lg">${proyecto.id}</p>
                     </div>
-                    
+
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
                         <p class="text-lg font-semibold">${proyecto.nombre}</p>
                     </div>
-                    
+
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de Inicio</label>
                         <p class="text-lg">${proyecto.fecha_inicio}</p>
                     </div>
-                    
+
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
                         <p class="text-lg">
@@ -58,19 +58,19 @@ function cargarProyecto() {
                             </span>
                         </p>
                     </div>
-                    
+
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Responsable</label>
                         <p class="text-lg">${proyecto.responsable}</p>
                     </div>
-                    
+
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Monto</label>
                         <p class="text-lg font-bold text-green-600">$${proyecto.monto.toLocaleString()}</p>
                     </div>
                 </div>
             `;
-            
+
             document.getElementById('proyecto-container').innerHTML = html;
         })
         .catch(error => {

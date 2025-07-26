@@ -5,7 +5,7 @@
 @section('content')
 <div class="bg-white p-6 rounded shadow">
     <h2 class="text-xl font-bold mb-4">Lista de Proyectos</h2>
-    
+
     <div id="proyectos-container">
         <p class="text-gray-500">Cargando proyectos...</p>
     </div>
@@ -22,7 +22,7 @@ function cargarProyectos() {
         .then(response => {
             const proyectos = response.data;
             let html = '';
-            
+
             if (proyectos.length === 0) {
                 html = '<p class="text-gray-500">No hay proyectos disponibles.</p>';
             } else {
@@ -41,7 +41,7 @@ function cargarProyectos() {
                         </thead>
                         <tbody>
                 `;
-                
+
                 proyectos.forEach(proyecto => {
                     html += `
                         <tr>
@@ -59,10 +59,10 @@ function cargarProyectos() {
                         </tr>
                     `;
                 });
-                
+
                 html += '</tbody></table>';
             }
-            
+
             document.getElementById('proyectos-container').innerHTML = html;
         })
         .catch(error => {

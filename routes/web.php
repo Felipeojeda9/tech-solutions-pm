@@ -6,7 +6,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Rutas para las vistas del CRUD
 Route::get('/proyectos', function () {
     return view('proyectos.index');
 })->name('proyectos.index');

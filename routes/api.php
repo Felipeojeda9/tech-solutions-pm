@@ -8,7 +8,8 @@ use App\Http\Controllers\{
     ProyectoIndexController,
     ProyectoShowController,
     ProyectoUpdateController,
-    ProyectoDestroyController
+    ProyectoDestroyController,
+    UserController
 };
 
 /* ---endpoints crud---*/
@@ -19,7 +20,8 @@ Route::put    ('/proyectos/{proyecto}', ProyectoUpdateController::class);
 Route::delete ('/proyectos/{proyecto}', ProyectoDestroyController::class);
 Route::get('/uf', [UFController::class, 'today']);
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::post('/registro', [UserController::class, 'register']);
+Route::post('/ingreso', [UserController::class, 'login']);
+
+
 

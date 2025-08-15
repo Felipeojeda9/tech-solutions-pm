@@ -6,6 +6,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+/* Vistas del Auth */
+Route::view('/login', 'auth.login')->name('login');
+Route::view('/register', 'auth.register')->name('register');
+
+/* Vistas del CRUD de proyectos */
 Route::get('/proyectos', function () {
     return view('proyectos.index');
 })->name('proyectos.index');

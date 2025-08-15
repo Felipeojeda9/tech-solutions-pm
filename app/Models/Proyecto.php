@@ -4,10 +4,7 @@ namespace App\Models;
 
 class Proyecto
 {
-
     // Simulación de una base de datos para proyectos.
-    // En un caso real, esto sería reemplazado por una conexión a una base de datos.
-
     private static $data = [
         [
             'id'            => 1,
@@ -16,6 +13,7 @@ class Proyecto
             'estado'        => 'En progreso',
             'responsable'   => 'María',
             'monto'         => 12000,
+            'created_by'    => 1,
         ],
         [
             'id'            => 2,
@@ -24,6 +22,7 @@ class Proyecto
             'estado'        => 'Completo',
             'responsable'   => 'Juan',
             'monto'         => 8000,
+            'created_by'    => 2,
         ],
         [
             'id'            => 3,
@@ -32,20 +31,17 @@ class Proyecto
             'estado'        => 'Pendiente',
             'responsable'   => 'Ana',
             'monto'         => 15000,
+            'created_by'    => 1,
         ],
     ];
 
-
-    /* Obtener todos los proyectos */
-
+    // Obtener todos los proyectos
     public static function all()
     {
         return self::$data;
     }
 
-
-    /* Obtener un proyecto por ID */
-
+    // Obtener un proyecto por ID
     public static function find($id)
     {
         foreach (self::$data as $project) {
@@ -56,17 +52,20 @@ class Proyecto
         return null;
     }
 
-    /* Crear un nuevo proyecto */
-
+    // Crear un nuevo proyecto
     public static function create(array $attributes)
     {
         $last = end(self::$data);
         $attributes['id'] = $last['id'] + 1;
+
+        // Asegurar que created_by esté presente
+        $attributes['created_by'] = $attributes['created_by'] ?? null;
+
         self::$data[] = $attributes;
         return $attributes;
     }
 
-    /*Actualizar un proyecto existente */
+    // Actualizar un proyecto existente
     public static function update($id, array $attributes)
     {
         foreach (self::$data as &$project) {
@@ -78,7 +77,7 @@ class Proyecto
         return null;
     }
 
-    /* Eliminar un proyecto por ID */
+    // Eliminar un proyecto por ID
     public static function delete($id)
     {
         foreach (self::$data as $index => $project) {

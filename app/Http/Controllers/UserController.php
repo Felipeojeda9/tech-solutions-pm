@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserController extends Controller
 {
@@ -13,21 +13,30 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:6',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
         ]);
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => bcrypt($validated['password']),
-        ]);
+         try {
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => bcrypt($validated['password']),
+            ]);
 
-    return response()->json([
-        'message' => 'Usuario registrado exitosamente',
-        'user' => $user
-    ], 201); }
+            return response()->json([
+                'message' => 'Usuario registrado exitosamente',
+                'data' => $user,
+                'status' => 'success'
+            ], JsonResponse::HTTP_CREATED);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Error al registrar el usuario',
+                'error' => $th->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 
     public function login(Request $request)
     {

@@ -62,17 +62,17 @@ class Proyecto extends Model
     }
 
     // Crear un nuevo proyecto
-    public static function create(array $attributes)
-    {
-        $last = end(self::$data);
-        $attributes['id'] = $last['id'] + 1;
+    // public static function create(array $attributes)
+    // {
+    //     $last = end(self::$data);
+    //     $attributes['id'] = $last['id'] + 1;
 
-        // Asegurar que created_by esté presente
-        $attributes['created_by'] = $attributes['created_by'] ?? null;
+    //     // Asegurar que created_by esté presente
+    //     $attributes['created_by'] = $attributes['created_by'] ?? null;
 
-        self::$data[] = $attributes;
-        return $attributes;
-    }
+    //     self::$data[] = $attributes;
+    //     return $attributes;
+    // }
 
     // Actualizar un proyecto existente
     // public static function update($id, array $attributes)

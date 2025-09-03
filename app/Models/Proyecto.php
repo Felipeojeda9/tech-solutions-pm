@@ -2,8 +2,23 @@
 
 namespace App\Models;
 
-class Proyecto
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Proyecto extends Model
 {
+    use HasFactory;
+
+    protected $table = 'proyectos';
+    protected $fillable = [
+        'nombre',
+        'fecha_inicio',
+        'estado',
+        'responsable',
+        'monto',
+        'created_by'
+    ];
+
     // Simulación de una base de datos para proyectos.
     private static $data = [
         [
@@ -35,12 +50,6 @@ class Proyecto
         ],
     ];
 
-    // Obtener todos los proyectos
-    public static function all()
-    {
-        return self::$data;
-    }
-
     // Obtener un proyecto por ID
     public static function find($id)
     {
@@ -66,26 +75,26 @@ class Proyecto
     }
 
     // Actualizar un proyecto existente
-    public static function update($id, array $attributes)
-    {
-        foreach (self::$data as &$project) {
-            if ($project['id'] == $id) {
-                $project = array_merge($project, $attributes);
-                return $project;
-            }
-        }
-        return null;
-    }
+    // public static function update($id, array $attributes)
+    // {
+    //     foreach (self::$data as &$project) {
+    //         if ($project['id'] == $id) {
+    //             $project = array_merge($project, $attributes);
+    //             return $project;
+    //         }
+    //     }
+    //     return null;
+    // }
 
-    // Eliminar un proyecto por ID
-    public static function delete($id)
-    {
-        foreach (self::$data as $index => $project) {
-            if ($project['id'] == $id) {
-                array_splice(self::$data, $index, 1);
-                return true;
-            }
-        }
-        return false;
-    }
+    // // Eliminar un proyecto por ID
+    // public static function delete($id)
+    // {
+    //     foreach (self::$data as $index => $project) {
+    //         if ($project['id'] == $id) {
+    //             array_splice(self::$data, $index, 1);
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 }

@@ -21,6 +21,9 @@ Route::post('/register', [UserController::class, 'register']);
 
 /* Rutas protegidas con JWT */
 Route::middleware(['jwt.auth'])->group(function () {
+    Route::get('/proyectos/{id}', ProyectoShowController::class);
+    Route::match(['put','patch'], '/proyectos/{id}, ProyectoUpdateController::class);')
+});
     // CRUD de proyectos
     Route::post   ('/proyectos', ProyectoCreateController::class);
     Route::get    ('/proyectos', ProyectoIndexController::class);
@@ -32,4 +35,3 @@ Route::middleware(['jwt.auth'])->group(function () {
     Route::get('/perfil', function () {
         return response()->json(['message' => 'Acceso autorizado']);
     });
-});

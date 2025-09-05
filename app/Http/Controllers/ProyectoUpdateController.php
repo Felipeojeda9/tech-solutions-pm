@@ -14,59 +14,65 @@ class ProyectoUpdateController extends Controller
         $proyecto = Proyecto::find($id);
 
         if (!$proyecto) {
-            return response()_>json([
-                'message' => 'proyecto no encontrado',
+            return response()->json([
+                'message' => 'Proyecto no encontrado',
                 'status' => 'not_found'
-            ], JsonResponse::HTTP_NOT_FOUND); //404 
+            ], JsonResponse::HTTP_NOT_FOUND);
         }
 
-        //Reglas para PATCH 
+        $messages = [
+            'required' => 'El campo :attribute es obligatorio.',
+            'date' => 'El campo :attribute debe ser una fecha válida.',
+            'numeric' => 'El campo :attribute debe ser numérico.',
+            'exists' => 'El campo :attribute debe referenciar un usuario válido.'
+        ];
+
+        // Reglas para PATCH
         $rules = [
-            'nombre' =[ 
-                'nombre' => 'sometimes|required|string|max:255',
-                'fecha_inicio' => 'sometimes|required|date',
-                'estado' => 'sometimes|required|string|max:100',
-                'responsable' => 'sometimes|required|string|max:255',
-                'monto' => 'sometimes|required|numeric|min:0',
-                'created_by' => 'sometimes|required|integer|exists:user,id',
+            'nombre' => 'sometimes|required|string|max:255',
+            'fecha_inicio' => 'sometimes|required|date',
+            'estado' => 'sometimes|required|string|max:100',
+            'responsable' => 'sometimes|required|string|max:255',
+            'monto' => 'sometimes|required|numeric|min:0',
+            'created_by' => 'sometimes|required|integer|exists:users,id',
+        ];
 
+        // Reglas para PUT (todos requeridos)
+        if ($request->isMethod('put')) {
+            $rules = [
+                'nombre' => 'required|string|max:255',
+                'fecha_inicio' => 'required|date',
+                'estado' => 'required|string|max:100',
+                'responsable' => 'required|string|max:255',
+                'monto' => 'required|numeric|min:0',
+                'created_by' => 'required|integer|exists:users,id',
             ];
+        }
 
-            // si el metodo es put, todos requeridos
-            if ($request->isMethod('put')) {
-                $rules = [
-                    'nombre' => 'required|string|max:255',
-                    'fecha_inicio' => 'required|date',
-                    'estado' => 'required|string|max:100',
-                    'responsable' => 'required|string|max:255',
-                    'monto' => 'required|numeric|min:0',
-                    'create_by' => 'required|integer|exists:users,id',
-                ];
-            }
-            $validator = Validator::make($request->all(), $rules, $messages);
-            if ($validator->fails()) {
-                return response()->json8[
-                    'message' 0> 'Errores en validacion',
-                    'errors' 0> $validator->errors(),
-                    'status' => 'validation_error'
-                ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY); //422
-            }
-            try {
-                $proyecto->fill($validator->validated());
-                $proyecto->save();
+        $validator = Validator::make($request->all(), $rules, $messages);
 
-                return response()->json([
-                    'message' => 'proyecto actualizado correctamente',
-                    'data' => $proyecto,
-                    'status' => 'success'
-        ], JsonResponse::HTTP_OK); //200
-            } catch (\Throwable $th) {
-                return response()->json([
-                    'message' => 'Error al actualizar el proyecto',
-                    'error' => $th-getMessage()
-                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR); //500
-            }
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Errores en validación',
+                'errors' => $validator->errors(),
+                'status' => 'validation_error'
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try {
+            $proyecto->fill($validator->validated());
+            $proyecto->save();
+
+            return response()->json([
+                'message' => 'Proyecto actualizado correctamente',
+                'data' => $proyecto,
+                'status' => 'success'
+            ], JsonResponse::HTTP_OK);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Error al actualizar el proyecto',
+                'error' => $th->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
+}

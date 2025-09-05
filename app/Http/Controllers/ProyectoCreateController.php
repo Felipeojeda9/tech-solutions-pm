@@ -11,50 +11,36 @@ class ProyectoCreateController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $messages = [
-            'nombre.required' => 'El nombre del proyecto es obligatorio.',
-            'fecha_inicio.required' => 'La fecha de inicio es obligatoria.',
-            'fecha_inicio.date' => 'La fecha de inicio debe ser una fecha válida.',
-            'estado.required' => 'El estado del proyecto es obligatorio.',
-            'responsable.required' => 'El responsable del proyecto es obligatorio.',
-            'monto.required' => 'El monto del proyecto es obligatorio.',
-            'monto.numeric' => 'El monto debe ser un valor numérico.',
-        ];
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required',
+            'nombre'       => 'required',
             'fecha_inicio' => 'required|date',
-            'estado' => 'required',
-            'responsable' => 'required',
-            'monto' => 'required|numeric',
-        ], $messages);
-
+            'estado'       => 'required',
+            'responsable'  => 'required',
+            'monto'        => 'required|numeric',
+        ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Error de validación',
-                'errors' => $validator->errors()
+                'errors'  => $validator->errors()
             ], JsonResponse::HTTP_BAD_REQUEST);
         }
+
         try {
             $validated = $validator->validated();
+            $validated['created_by'] = $request->user()->id;
 
-            $proyecto = Proyecto::create([
-                'nombre' => $validated['nombre'],
-                'fecha_inicio' => $validated['fecha_inicio'],
-                'estado' => $validated['estado'],
-                'responsable' => $validated['responsable'],
-                'monto' => $validated['monto'],
-            ]);
+            $proyecto = Proyecto::create($validated);
 
             return response()->json([
                 'message' => 'Proyecto registrado exitosamente',
-                'data' => $proyecto,
-                'status' => 'success'
+                'data'    => $proyecto,
+                'status'  => 'success'
             ], JsonResponse::HTTP_CREATED);
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Error al registrar el proyecto',
-                'error' => $th->getMessage()
+                'error'   => $th->getMessage()
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

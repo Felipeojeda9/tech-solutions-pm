@@ -4,16 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Proyecto;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ProyectoDestroyController extends Controller
 {
     public function __invoke($id)
     {
-        $deleted = Proyecto::delete($id);
-        if ($deleted) {
-            return response()->noContent();
+        $proyecto = Proyecto::find($id);
+
+        if (!$proyecto) {
+            return response()->json([
+                'message' => 'Proyecto no encontrado',
+                'status' => 'not_found'
+            ], JsonResponse::HTTP_NOT_FOUND); // 404
         }
-        return response()->json(['error' => 'Proyecto no encontrado'], 404);
+
+        $proyecto->delete();
+
+        return response()->noContent(); // 204
     }
 }
-

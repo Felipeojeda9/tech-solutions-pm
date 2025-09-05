@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 
 class ProyectoController extends Controller
 {
-    public function index() { return Proyecto::all(); }
+    public function index()
+    {
+        return Proyecto::paginate(10);
+    }
 
     public function store(Request $r)
     {
@@ -18,16 +21,28 @@ class ProyectoController extends Controller
             'responsable'  => 'required',
             'monto'        => 'required|numeric',
         ]);
+        $data['created_by'] = $r->user()->id;
         return Proyecto::create($data);
     }
 
-    public function show(Proyecto $proyecto)    { return $proyecto; }
+    public function show(Proyecto $proyecto)
+    {
+        return $proyecto;
+    }
 
     public function update(Request $r, Proyecto $proyecto)
     {
-        $proyecto->update($r->all());
+        $data = $r->validate([
+            'nombre'       => 'sometimes|required',
+            'fecha_inicio' => 'sometimes|required|date',
+            'estado'       => 'sometimes|required',
+            'responsable'  => 'sometimes|required',
+            'monto'        => 'sometimes|required|numeric',
+        ]);
+        $proyecto->update($data);
         return $proyecto->refresh();
     }
+
     public function destroy(Proyecto $proyecto)
     {
         $proyecto->delete();

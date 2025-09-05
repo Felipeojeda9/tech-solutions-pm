@@ -9,21 +9,20 @@ class ProyectoIndexController extends Controller
 {
     public function __invoke()
     {
-
-        $proyectos = Proyecto::orderBy('id', 'desc')->get();
+        $proyectos = Proyecto::orderBy('id', 'desc')->paginate(10);
 
         if ($proyectos->isEmpty()) {
-            return response()->Json([
+            return response()->json([
                 'message' => 'No se encontraron proyectos',
-                'data' => [],
-                'status' => 'success'
+                'data'    => [],
+                'status'  => 'success'
             ], JsonResponse::HTTP_OK);
         }
 
-        return response()->Json([
+        return response()->json([
             'message' => 'Lista de proyectos obtenida exitosamente',
-            'data' => $proyectos,
-            'status' => 'success'
+            'data'    => $proyectos,
+            'status'  => 'success'
         ], JsonResponse::HTTP_OK);
     }
 }
